@@ -81,12 +81,12 @@
 </head>
 <body>
     <main>
-        <h1>Greetings!</h1>
-        <p>This page is load balanced. The only difference between the pages served up by these different nodes is that this one is served up by <strong><?php echo gethostname(); ?></strong></p>
+        <h1>Здравствуйте!</h1>
+        <p>Эта страница обслуживается балансировщиком нагрузки. Для пользователя страница всегда выглядит одинаково, хотя эта обслуживается машиной под именем: <strong><?php echo gethostname(); ?></strong></p>
 
         <h2>Data from the Demo Table:</h2>
         <?php
-        $servername = "34.118.105.244"; // Cloud SQL Public IP
+        $servername = "{{DB_HOST}}"; // Cloud SQL Public IP
         $username = "admin";            // Database username
         $password = "admin";            // Database password
         $dbname = "demo";               // Database name

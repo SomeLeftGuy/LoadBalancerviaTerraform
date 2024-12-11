@@ -1,13 +1,13 @@
 # Configure the Google Cloud provider
 provider "google" {
-  project = "bsuir-project-439420"
-  region  = "europe-central2"
-  zone    = "europe-central2-a"
+  project = var.project_id
+  region  = var.region
+  zone    = var.zone
 }
 
 # Create a VPC network
 resource "google_compute_network" "web_network" {
-  name = "web-network"
+  name = "app-network"
 }
 
 # Create a firewall rule to allow HTTP traffic
@@ -83,6 +83,7 @@ resource "google_compute_instance_template" "web_template" {
     apt-get install -y apache2 
     rm /var/www/html/index.html
     echo '${data.local_file.index.content}' > /var/www/html/index.php
+    sed -i 's/{{DB_HOST}}/${google_sql_database_instance.default.public_ip_address}/g' /var/www/html/index.php
     systemctl enable apache2
     systemctl start apache2
     systemctl restart apache2
@@ -93,7 +94,7 @@ resource "google_compute_instance_template" "web_template" {
 resource "google_compute_region_instance_group_manager" "web_mig" {
   name                = "web-mig"
   base_instance_name  = "web"
-  target_size         = 3
+  target_size         = var.nodes
   region              = "europe-central2"
   named_port {
     name = "http"
@@ -114,6 +115,7 @@ resource "google_compute_region_instance_group_manager" "web_mig" {
     most_disruptive_allowed_action = "REPLACE"
     max_surge_fixed                = 0
     replacement_method             = "RECREATE"
+    max_unavailable_fixed          = var.nodes
   }
 }
 
@@ -197,4 +199,7 @@ resource "google_sql_user" "default" {
   instance = google_sql_database_instance.default.name
   password = var.db_password
   project  = var.project_id
+}
+output "lb_public_ip" {
+  value = google_compute_global_address.default.address
 }

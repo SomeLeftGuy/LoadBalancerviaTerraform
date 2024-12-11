@@ -33,9 +33,9 @@ variable "zone" {
 }
 
 variable "nodes" {
-  type        = string
+  type        = number
   description = "The number of nodes in the managed instance group"
-  default     = "3"
+  default     = 3
 }
 variable "authorized_networks" {
   description = "List of IP addresses authorized to connect to the instance"
