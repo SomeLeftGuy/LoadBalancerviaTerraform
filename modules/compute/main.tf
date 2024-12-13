@@ -6,15 +6,12 @@ resource "google_compute_instance_template" "web_template" {
   name_prefix        = "web-template-"
   machine_type  = "e2-medium"
   can_ip_forward = false
-
   tags = ["http-server"]
-
   disk {
     auto_delete  = true
     boot         = true
     source_image = "projects/debian-cloud/global/images/family/debian-11"
   }
-
   network_interface {
     network = var.network #google_compute_network.web_network.name
     access_config {}

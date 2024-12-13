@@ -15,7 +15,7 @@ resource "google_compute_backend_service" "default" {
 }
 
 resource "google_compute_url_map" "default" {
-  name            = "web-url-map"
+  name            = "web-url-map" 
   default_service = google_compute_backend_service.default.self_link
 }
 
@@ -51,12 +51,21 @@ resource "google_compute_firewall" "allow_http" {
 
   allow {
     protocol = "tcp"
-    ports    = ["80"]
+    ports    = ["80, 443"]
   }
-  allow{
+
+
+  source_ranges = ["0.0.0.0/0"]
+}
+resource "google_compute_firewall" "allow_ssh" {
+  name    = "allow-http"
+  network = google_compute_network.web_network.name
+
+  allow {
     protocol = "tcp"
     ports    = ["22"]
   }
 
-  source_ranges = ["0.0.0.0/0"]
+
+  source_ranges = ["<Company Ip addresses>"]
 }

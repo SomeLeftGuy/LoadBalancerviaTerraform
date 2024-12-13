@@ -1,10 +1,10 @@
 variable "project_id" {
 }
 variable "region" {
-  default = "europe-central-2"
+  default = "europe-central2"
 }
 variable "zone" {
-  default = "europe-central-2a"
+  default = "europe-central2-a"
 }
 variable "db_user" {
   type        = string
